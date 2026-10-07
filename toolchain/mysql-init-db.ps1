@@ -25,7 +25,8 @@ if (Test-Path $envFile) {
         if ($line) { $dbName = ($line -split '=', 2)[1].Trim().Trim('"', "'") }
     }
 }
-if ([string]::IsNullOrWhiteSpace($appPass))  { $appPass  = 'Cyan1120' }
+# 仓库不内置明文密码：必须显式提供，否则拒绝建库（避免用公开可见的默认口令建账号）
+if ([string]::IsNullOrWhiteSpace($appPass)) { Write-Host 'MYSQL_PASSWORD not set. Set it via env var or repo/.env (copy .env.example -> .env).' -ForegroundColor Red; exit 1 }
 if ([string]::IsNullOrWhiteSpace($rootPass)) { $rootPass = $appPass }
 if ([string]::IsNullOrWhiteSpace($dbName))   { $dbName   = 'Cyan' }
 

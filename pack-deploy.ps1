@@ -249,13 +249,14 @@ Copy-In (Join-Path $Root 'server\src\main\resources\default-content.json')   'co
 Copy-In (Join-Path $Root 'README.md')          'README.md'          '项目说明'
 
 # ============================== 5.1 配置脱敏 ==============================
-# application.yml 里带本机开发用的默认密码兜底值（${MYSQL_PASSWORD:Cyan1120} 之类），
-# jar 内也有一份。这里把复制到包里的参考副本脱敏，避免把开发密码带上服务器。
-# 真正的生产值由 /opt/portfolio/deploy/portfolio.env 通过环境变量注入，不受影响。
+# application.yml 曾在 ${MYSQL_PASSWORD:xxx} 之类的位置带本机开发用的默认口令，
+# jar 内也有一份。仓库版本现已不留硬编码口令，这里仍防御性扫描并脱敏一次，
+# 避免把开发密码带上服务器。真正的生产值由 portfolio.env 通过环境变量注入。
 $appYmlStage = Join-Path $stage 'config\application.yml'
 if (Test-Path $appYmlStage) {
     $ymlText = Get-Content $appYmlStage -Raw
-    $ymlText = $ymlText -replace 'Cyan1120', 'CHANGEME-INJECT-BY-ENV'
+    # 任何 ${XXX_PASSWORD:明文} 的兜底值一律清空，只保留占位符形式
+    $ymlText = $ymlText -replace '(\$\{[A-Za-z_]*PASSWORD[A-Za-z_]*:)[^}\r\n]+(\})', '$1$2'
     $ymlText = $ymlText -replace 'please-change-me-please-change-me-please-change-me-32byte-minimum', 'CHANGEME-USE-openssl-rand-hex-48'
     Set-Content -Path $appYmlStage -Value $ymlText -Encoding UTF8
     Ok 'config/application.yml 已脱敏（默认密码替换为占位符，生产值由环境变量注入）'
@@ -616,8 +617,8 @@ foreach ($f in (Get-ChildItem $stage -Recurse -File)) {
     }
 }
 
-# 内容层扫描：本机开发密码不应出现在包里
-$leakPatterns = @('Cyan1120', 'please-change-me', 'JWT_SECRET=[A-Za-z0-9+/=]{32,}')
+# 内容层扫描：包里不应出现任何明文口令（本仓库不内置默认口令，故只做模式匹配）
+$leakPatterns = @('\$\{[A-Za-z_]*PASSWORD[A-Za-z_]*:[^}\s]+\}', 'please-change-me', 'JWT_SECRET=[A-Za-z0-9+/=]{32,}')
 $scanExt = @('.yml', '.yaml', '.json', '.conf', '.sh', '.md', '.example', '.sql', '.service')
 $leaks = @()
 foreach ($f in (Get-ChildItem $stage -Recurse -File)) {

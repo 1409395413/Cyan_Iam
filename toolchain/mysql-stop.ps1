@@ -17,10 +17,13 @@ if ([string]::IsNullOrWhiteSpace($pw)) { $pw = EnvFrom (Join-Path $repoRoot '.en
 if ([string]::IsNullOrWhiteSpace($pw)) {
     $pw = EnvFrom (Join-Path $repoRoot '.env') 'MYSQL_PASSWORD'
 }
-if ([string]::IsNullOrWhiteSpace($pw)) { $pw = 'Cyan1120' }
+# 未配置密码时不做猜测：跳过优雅关机，直接走下面的进程终止分支
+if ([string]::IsNullOrWhiteSpace($pw)) {
+    Write-Host '[mysql] MYSQL_ROOT_PASSWORD/MYSQL_PASSWORD 未配置，跳过优雅关机' -ForegroundColor DarkYellow
+}
 
 $admin = Join-Path $Root 'mysql\bin\mysqladmin.exe'
-if (Test-Path $admin) {
+if ((Test-Path $admin) -and -not ([string]::IsNullOrWhiteSpace($pw))) {
     $env:MYSQL_PWD = $pw
     $null = & $admin -h127.0.0.1 -P3307 -uroot shutdown 2>$null
     Start-Sleep -Seconds 2

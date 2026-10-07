@@ -68,6 +68,10 @@ Redis 挂了不影响站点可写，MySQL 挂了才会真出问题——所以 M
 - **FLUSHALL / FLUSHDB / SHUTDOWN / DEBUG 全部禁用**
 - **CONFIG / KEYS 改名**成随机串，防扫站的人一键改配置或遍历 key
 
-密码优先级：`$env:REDIS_PASSWORD` → 仓库根目录 `.env` 的 `REDIS_PASSWORD` → 默认 `Cyan1120`。
+密码优先级：`$env:REDIS_PASSWORD` → 仓库根目录 `.env` 的 `REDIS_PASSWORD` → **无默认值**。
+
+> 脚本不再内置任何默认口令：未配置时 `redis-start.ps1` 直接报错退出（绝不启动无口令实例），
+> `check.ps1` / `redis-stop.ps1` 提示后跳过。仓库是公开的，口令只能来自环境变量或 `.env`。
+> 先 `copy .env.example .env` 再填自己的密码。
 
 > 生产请用 `deploy/redis.conf`（Linux 版），密码从环境变量注入并 ≥32 位随机串。

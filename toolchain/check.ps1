@@ -57,7 +57,8 @@ if (Test-Path $mysqld) {
         if (Test-Path $mysqlc) {
             $pw = $env:MYSQL_PASSWORD
             if ([string]::IsNullOrWhiteSpace($pw)) { $pw = EnvFrom $envFile 'MYSQL_PASSWORD' }
-            if ([string]::IsNullOrWhiteSpace($pw)) { $pw = 'Cyan1120' }
+            # 仓库不内置明文密码；未配置时留空并提示，而不是猜一个默认值
+            if ([string]::IsNullOrWhiteSpace($pw)) { $pw = ''; Write-Host '  tables      (skip: MYSQL_PASSWORD 未配置)' -ForegroundColor DarkYellow }
             $env:MYSQL_PWD = $pw
             $tables = (& $mysqlc -h127.0.0.1 -P3307 -uyc_app -N -e 'SHOW TABLES FROM Cyan' 2>$null)
             Write-Host ('  tables      ' + (($tables -join ' ').Trim()))
@@ -76,7 +77,8 @@ if (Test-Path $cli) {
     Write-Host '  binary      OK' -ForegroundColor Green
     $pass = $env:REDIS_PASSWORD
     if ([string]::IsNullOrWhiteSpace($pass)) { $pass = EnvFrom $envFile 'REDIS_PASSWORD' }
-    if ([string]::IsNullOrWhiteSpace($pass)) { $pass = 'Cyan1120' }
+    # 仓库不内置明文密码；未配置时留空并提示，仍尝试无密码连接
+    if ([string]::IsNullOrWhiteSpace($pass)) { $pass = ''; Write-Host '  password    (warn: REDIS_PASSWORD 未配置)' -ForegroundColor DarkYellow }
     $env:REDISCLI_AUTH = $pass
     $pong = (& $cli -h 127.0.0.1 ping 2>$null) -join ' '
     if ($pong -like '*PONG*') {

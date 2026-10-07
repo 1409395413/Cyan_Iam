@@ -19,6 +19,12 @@ web/dist/
 web/.vite/
 *.local
 
+# ================= build artifacts =================
+# 打包产物是构建输出，不是源码：进仓库会不断膨胀且夹带本机路径/配置
+*.zip
+deploy.zip
+portfolio-deploy-package.zip
+
 # ================= data =================
 # 站点内容与素材都在容器卷里，绝不进仓库（重新部署才不会覆盖线上数据）
 data/

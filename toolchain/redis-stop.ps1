@@ -11,9 +11,10 @@ if ([string]::IsNullOrWhiteSpace($pass) -and (Test-Path (Join-Path $repoRoot '.e
     $line = Get-Content (Join-Path $repoRoot '.env') | Where-Object { $_ -match '^\s*REDIS_PASSWORD\s*=' } | Select-Object -First 1
     if ($line) { $pass = ($line -split '=', 2)[1].Trim().Trim('"', "'") }
 }
-if ([string]::IsNullOrWhiteSpace($pass)) { $pass = 'Cyan1120' }
+# 未配置密码时不做猜测：留空并提示，由下面的进程终止分支兜底
+if ([string]::IsNullOrWhiteSpace($pass)) { $pass = ''; Write-Host '[redis] REDIS_PASSWORD 未配置，跳过 SAVE' -ForegroundColor DarkYellow }
 
-if (Test-Path $cli) {
+if ((Test-Path $cli) -and -not ([string]::IsNullOrWhiteSpace($pass))) {
     $null = & $cli -a $pass save 2>$null
     Write-Host '[redis] SAVE issued'
 }

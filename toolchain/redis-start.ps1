@@ -21,7 +21,11 @@ if ([string]::IsNullOrWhiteSpace($pass)) {
         if ($line) { $pass = ($line -split '=', 2)[1].Trim().Trim('"', "'") }
     }
 }
-if ([string]::IsNullOrWhiteSpace($pass)) { $pass = 'Cyan1120' }
+# 仓库不内置明文密码：必须显式提供，绝不启动无口令的 Redis
+if ([string]::IsNullOrWhiteSpace($pass)) {
+    Write-Host 'REDIS_PASSWORD not set. Set it via env var or repo/.env (copy .env.example -> .env).' -ForegroundColor Red
+    exit 1
+}
 
 # ---- data dir ----
 $dataDir = (Join-Path $Root 'redis-data').Replace('\', '/')
