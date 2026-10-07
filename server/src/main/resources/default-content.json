@@ -1,0 +1,608 @@
+{
+  "version": 1,
+  "site": {
+    "brandName": "Cyan · Studio",
+    "brandMark": "Cc",
+    "footerNote": "摄影 · 剪辑 · 直播搭建 · AI 影像<br>让画面为目标服务。",
+    "copyright": "© 2026 Cyan · Studio. 保留所有权利。",
+    "footerCols": [
+      {
+        "title": "作品",
+        "links": [
+          {
+            "label": "摄影作品集",
+            "href": "#photo"
+          },
+          {
+            "label": "剪辑作品",
+            "href": "#edit"
+          },
+          {
+            "label": "直播案例",
+            "href": "#live"
+          },
+          {
+            "label": "AI 视频",
+            "href": "#ai"
+          }
+        ]
+      },
+      {
+        "title": "服务",
+        "links": [
+          {
+            "label": "商业拍摄",
+            "href": "#contact"
+          },
+          {
+            "label": "品牌短片",
+            "href": "#contact"
+          },
+          {
+            "label": "直播执行",
+            "href": "#contact"
+          },
+          {
+            "label": "影像培训",
+            "href": "#contact"
+          }
+        ]
+      },
+      {
+        "title": "关于",
+        "links": [
+          {
+            "label": "个人简介",
+            "href": "#about"
+          },
+          {
+            "label": "合作流程",
+            "href": "#contact"
+          },
+          {
+            "label": "常见问题",
+            "href": "#contact"
+          }
+        ]
+      },
+      {
+        "title": "关注",
+        "links": [
+          {
+            "label": "微信视频号",
+            "href": "#contact"
+          },
+          {
+            "label": "小红书",
+            "href": "#contact"
+          },
+          {
+            "label": "Bilibili",
+            "href": "#contact"
+          },
+          {
+            "label": "Instagram",
+            "href": "#contact"
+          }
+        ]
+      }
+    ]
+  },
+  "modules": [
+    {
+      "id": "home",
+      "type": "hero",
+      "visible": true,
+      "flat": true,
+      "size": "full",
+      "showNav": false,
+      "navLabel": "首页",
+      "eyebrow": "Photography · Edit · Live · AI Film",
+      "title": "用光影<br>讲述<em>值得</em><br>被记住的故事",
+      "lead": "摄影师 / 剪辑师 / 直播技术导演 / AI 影像创作者。八年间为品牌、媒体与独立创作者交付从前期拍摄到后期成片、从直播间搭建到 AI 生成影像的完整视觉方案。",
+      "actions": [
+        {
+          "label": "查看作品",
+          "href": "#photo",
+          "kind": "primary"
+        },
+        {
+          "label": "聊聊合作",
+          "href": "#contact",
+          "kind": "ghost"
+        }
+      ],
+      "chips": [
+        "4K / 6K 拍摄",
+        "DaVinci Resolve",
+        "多机位导播",
+        "AI 生成影像"
+      ],
+      "stats": [
+        {
+          "value": "260+",
+          "label": "交付成片"
+        },
+        {
+          "value": "08年",
+          "label": "从业经验"
+        },
+        {
+          "value": "120场",
+          "label": "直播执行"
+        },
+        {
+          "value": "40+",
+          "label": "服务品牌"
+        }
+      ],
+      "reel": {
+        "bar": "Showreel 2026",
+        "media": {
+          "kind": "video",
+          "src": "",
+          "title": "主视觉视频占位",
+          "hint": "建议 1920×1080 / MP4 / 15–30s",
+          "badge": "4K · 60fps",
+          "dur": "02:14"
+        }
+      }
+    },
+    {
+      "id": "about",
+      "type": "about",
+      "visible": true,
+      "flat": false,
+      "size": "full",
+      "showNav": true,
+      "navLabel": "关于我",
+      "eyebrow": "01 — About Me",
+      "title": "把每一次快门，<br>当成一次叙事练习。",
+      "lead": "",
+      "paragraphs": [
+        "我是 Cyan，一名跨领域的影像创作者。从商业人像与风光的静态摄影起步，逐步扩展到品牌短片剪辑、大型活动的多机位直播导播，以及近两年的 AI 生成影像实践。",
+        "我的工作方式偏向\"全流程参与\"：理解目标 → 设计分镜 → 现场执行 → 后期打磨。这让影像不只是好看的画面，而是能解决问题的表达。"
+      ],
+      "media": {
+        "kind": "image",
+        "src": "",
+        "title": "个人形象照",
+        "hint": "竖版 3:4 · 建议 1200×1600",
+        "cap": "Cyan",
+        "cap2": "上海 / 全国出差"
+      },
+      "facts": [
+        {
+          "k": "主攻",
+          "v": "商业摄影 / 品牌短片"
+        },
+        {
+          "k": "器材",
+          "v": "Sony FX3 · A7R V · 电影镜头组"
+        },
+        {
+          "k": "后期",
+          "v": "DaVinci · Premiere · After Effects"
+        },
+        {
+          "k": "直播",
+          "v": "Blackmagic ATEM · vMix · OBS"
+        }
+      ],
+      "skills": [
+        "棚拍布光",
+        "旅拍纪实",
+        "调色",
+        "叙事剪辑",
+        "动效包装",
+        "多机位导播",
+        "推流运维",
+        "AI 视频生成",
+        "虚拟主播"
+      ]
+    },
+    {
+      "id": "photo",
+      "type": "stack",
+      "visible": true,
+      "flat": false,
+      "size": "full",
+      "showNav": true,
+      "navLabel": "摄影",
+      "eyebrow": "02 — Photography",
+      "title": "摄影作品集",
+      "lead": "悬停任意一张，它就会成为主图并保持；点击右上角 ✕ 收牌。",
+      "actions": [
+        {
+          "label": "预约拍摄",
+          "href": "#contact",
+          "kind": "ghost"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "src": "",
+          "title": "光之边缘",
+          "meta": "人像 · 12 帧",
+          "hint": "竖版 3:4",
+          "badge": "封面"
+        },
+        {
+          "kind": "image",
+          "src": "",
+          "title": "山海之间",
+          "meta": "风光 · 长曝光",
+          "hint": "横版 4:3"
+        },
+        {
+          "kind": "image",
+          "src": "",
+          "title": "夜行城市",
+          "meta": "街拍 · 夜景",
+          "hint": "横版 4:3"
+        },
+        {
+          "kind": "image",
+          "src": "",
+          "title": "产品静物",
+          "meta": "商业 · 棚拍",
+          "hint": "横版 4:3"
+        },
+        {
+          "kind": "image",
+          "src": "",
+          "title": "婚礼现场",
+          "meta": "纪实 · 抓拍",
+          "hint": "横版 4:3"
+        },
+        {
+          "kind": "image",
+          "src": "",
+          "title": "空间与线",
+          "meta": "建筑 · 空间",
+          "hint": "竖版 3:4"
+        }
+      ]
+    },
+    {
+      "id": "edit",
+      "type": "stack",
+      "visible": true,
+      "flat": false,
+      "size": "full",
+      "showNav": true,
+      "navLabel": "剪辑",
+      "eyebrow": "03 — Video Editing",
+      "title": "剪辑作品展示",
+      "lead": "视频位被选中后自动播放，适合放成片片段或花絮。",
+      "actions": [
+        {
+          "label": "获取完整片单",
+          "href": "#contact",
+          "kind": "ghost"
+        }
+      ],
+      "media": [
+        {
+          "kind": "video",
+          "src": "",
+          "title": "溯源 · 品牌宣传片",
+          "meta": "导演 / 剪辑 / 调色",
+          "dur": "03:42",
+          "badge": "4K",
+          "hint": "1920×1080 · MP4"
+        },
+        {
+          "kind": "video",
+          "src": "",
+          "title": "川西十二天",
+          "meta": "旅行 · Vlog",
+          "dur": "12:05",
+          "hint": "1920×1080 · MP4"
+        },
+        {
+          "kind": "video",
+          "src": "",
+          "title": "30 天城市计划",
+          "meta": "短视频 · 竖屏",
+          "dur": "01:20",
+          "hint": "1080×1920 · MP4"
+        },
+        {
+          "kind": "video",
+          "src": "",
+          "title": "年度发布会纪实",
+          "meta": "活动 · 多机位",
+          "dur": "05:58",
+          "hint": "1920×1080 · MP4"
+        }
+      ]
+    },
+    {
+      "id": "live",
+      "type": "cases",
+      "visible": true,
+      "flat": false,
+      "size": "full",
+      "showNav": true,
+      "navLabel": "直播搭建",
+      "eyebrow": "04 — Live Production",
+      "title": "直播搭建案例",
+      "lead": "从场地勘测、机位布设、灯光声学到导播推流与应急冗余，交付稳定可复用的直播方案。",
+      "actions": [
+        {
+          "label": "索取方案清单",
+          "href": "#contact",
+          "kind": "ghost"
+        }
+      ],
+      "cases": [
+        {
+          "title": "电竞总决赛 · 多机位转播",
+          "desc": "6 机位现场切换，含游走机位与选手第一视角，双平台同步推流，全程零中断。",
+          "media": {
+            "kind": "image",
+            "src": "",
+            "title": "直播间全景图占位",
+            "hint": "1920×1080",
+            "badge": "Live"
+          },
+          "specs": [
+            {
+              "k": "场地面积",
+              "v": "800 ㎡"
+            },
+            {
+              "k": "机位数量",
+              "v": "6 + 2 备用"
+            },
+            {
+              "k": "导播台",
+              "v": "ATEM Constellation 8K"
+            },
+            {
+              "k": "推流码率",
+              "v": "16 Mbps · 1080P60"
+            },
+            {
+              "k": "观看峰值",
+              "v": "42.6 万"
+            }
+          ],
+          "tags": [
+            "多机位导播",
+            "双平台推流",
+            "现场音频",
+            "备用链路"
+          ]
+        },
+        {
+          "title": "品牌大促 · 电商直播间",
+          "desc": "三点布光 + 虚拟背景双方案，现场切换商品机位与主播特写，支持 12 小时连续直播。",
+          "media": {
+            "kind": "image",
+            "src": "",
+            "title": "电商直播间占位",
+            "hint": "1920×1080",
+            "badge": "Live"
+          },
+          "specs": [
+            {
+              "k": "直播间面积",
+              "v": "60 ㎡"
+            },
+            {
+              "k": "布光方案",
+              "v": "三点布光 + 柔光箱"
+            },
+            {
+              "k": "导播软件",
+              "v": "vMix 4K"
+            },
+            {
+              "k": "推流码率",
+              "v": "10 Mbps · 1080P60"
+            },
+            {
+              "k": "连续时长",
+              "v": "12 小时"
+            }
+          ],
+          "tags": [
+            "绿幕抠像",
+            "商品特写",
+            "实时字幕",
+            "声音降噪"
+          ]
+        },
+        {
+          "title": "新车发布会 · 异地连线",
+          "desc": "主会场与两个分会场三方连线，4K 主输出 + 1080P 备份，含媒体分发与现场大屏回传。",
+          "media": {
+            "kind": "image",
+            "src": "",
+            "title": "发布会推流占位",
+            "hint": "1920×1080",
+            "badge": "Live"
+          },
+          "specs": [
+            {
+              "k": "会场数量",
+              "v": "3 地连线"
+            },
+            {
+              "k": "输出规格",
+              "v": "4K 主路 + 1080P 备路"
+            },
+            {
+              "k": "传输方案",
+              "v": "SRT + 专线双链路"
+            },
+            {
+              "k": "音响",
+              "v": "独立调音台 + 备份"
+            },
+            {
+              "k": "团队规模",
+              "v": "11 人"
+            }
+          ],
+          "tags": [
+            "SRT 传输",
+            "多地连线",
+            "大屏回传",
+            "媒体分发"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "statement",
+      "type": "quote",
+      "visible": true,
+      "flat": false,
+      "size": "full",
+      "showNav": false,
+      "navLabel": "主张",
+      "title": "静态影像、动态叙事、实时直播与 AI 生成 —— 四种媒介，一套审美标准。",
+      "lead": "无论媒介如何变化，我关注的始终是同一件事：让画面为目标服务。"
+    },
+    {
+      "id": "ai",
+      "type": "stack",
+      "visible": true,
+      "flat": false,
+      "size": "full",
+      "showNav": true,
+      "navLabel": "AI 视频",
+      "eyebrow": "05 — AI Film",
+      "title": "AI 视频作品展示",
+      "lead": "文生视频、图生视频与混合工作流，用于概念影像、虚拟角色与无法实拍的场景。",
+      "actions": [
+        {
+          "label": "定制 AI 影像",
+          "href": "#contact",
+          "kind": "ghost"
+        }
+      ],
+      "media": [
+        {
+          "kind": "video",
+          "src": "",
+          "title": "赛博都市 60s",
+          "meta": "全 AI 生成概念城市影像",
+          "dur": "01:00",
+          "tags": [
+            "文生视频",
+            "镜头调度",
+            "AI 配乐"
+          ]
+        },
+        {
+          "kind": "video",
+          "src": "",
+          "title": "水墨东方",
+          "meta": "图生视频 + 手绘分镜",
+          "dur": "00:45",
+          "tags": [
+            "图生视频",
+            "风格迁移",
+            "后期合成"
+          ]
+        },
+        {
+          "kind": "video",
+          "src": "",
+          "title": "AI 虚拟主播",
+          "meta": "数字人 + 语音克隆",
+          "dur": "02:30",
+          "tags": [
+            "数字人",
+            "语音克隆",
+            "口型同步"
+          ]
+        },
+        {
+          "kind": "video",
+          "src": "",
+          "title": "概念产品影像",
+          "meta": "实拍与 AI 延展场景拼接",
+          "dur": "00:30",
+          "tags": [
+            "实拍 + AI",
+            "场景延展",
+            "调色统一"
+          ]
+        },
+        {
+          "kind": "video",
+          "src": "",
+          "title": "音乐可视化",
+          "meta": "节拍驱动的生成式序列",
+          "dur": "03:12",
+          "tags": [
+            "节拍驱动",
+            "粒子特效",
+            "AE 合成"
+          ]
+        },
+        {
+          "kind": "video",
+          "src": "",
+          "title": "历史场景复原",
+          "meta": "纪录片 AI 辅助重建",
+          "dur": "01:48",
+          "tags": [
+            "场景重建",
+            "素材修复",
+            "旁白配音"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "type": "contact",
+      "visible": true,
+      "flat": false,
+      "size": "full",
+      "showNav": true,
+      "navLabel": "联系",
+      "eyebrow": "06 — Contact",
+      "title": "说说你的项目",
+      "lead": "无论是商业拍摄、品牌短片、直播执行还是 AI 影像实验，欢迎邮件或直接加微信，24 小时内回复。",
+      "rows": [
+        {
+          "k": "邮箱",
+          "v": "hello@yuchen.studio"
+        },
+        {
+          "k": "微信",
+          "v": "yuchen_film"
+        },
+        {
+          "k": "电话",
+          "v": "+86 138 0000 0000"
+        },
+        {
+          "k": "所在地",
+          "v": "上海（可全国 / 远程协作）"
+        },
+        {
+          "k": "档期",
+          "v": "2026 Q4 起接受预约"
+        }
+      ],
+      "formNote": "表单为静态占位，接入后端后可直接提交。",
+      "submitLabel": "发送需求",
+      "projectTypes": [
+        "商业摄影",
+        "视频剪辑",
+        "直播搭建",
+        "AI 视频制作",
+        "全流程合作"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+# =============================================================================
+#  可选：在宿主机上跑一层 Nginx 做 HTTPS 终结，反代到 compose 的 web(80)
+#  用法（宿主机）：
+#    1. docker-compose.yml 里把 HTTP_PORT 设为 8081，只监听内网
+#    2. 把本文件放到 /etc/nginx/conf.d/portfolio.conf，改掉域名与证书路径
+#    3. nginx -t && systemctl reload nginx
+#
+#  更省事的替代方案：用 Caddy 自动签发证书
+#    portfolio.conf:
+#      www.yourdomain.com {
+#        reverse_proxy 127.0.0.1:8081
+#        encode gzip
+#      }
+# =============================================================================
+
+upstream portfolio_web {
+    server 127.0.0.1:8081;
+    keepalive 32;
+}
+
+# HTTP → HTTPS
+server {
+    listen 80;
+    server_name www.yourdomain.com yourdomain.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    http2 on;
+    server_name www.yourdomain.com;
+
+    ssl_certificate     /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
+    ssl_protocols       TLSv1.2 TLSv1.3;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+    ssl_session_cache   shared:SSL:10m;
+    ssl_session_timeout 1d;
+
+    # 开了 HTTPS 之后再启用 HSTS（先小 max-age 试跑，确认无误再调到 31536000）
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header X-Content-Type-Options nosniff always;
+    add_header X-Frame-Options SAMEORIGIN always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+
+    client_max_body_size 220m;   # 后台传视频要够大
+
+    location / {
+        proxy_pass http://portfolio_web;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header Connection "";
+        proxy_read_timeout 120s;
+    }
+
+    # 静态资源交给容器内的 nginx，这里不重复缓存策略
+    location ~* \.(?:js|css|png|jpg|jpeg|webp|gif|svg|woff2?|mp4|webm)$ {
+        proxy_pass http://portfolio_web;
+        proxy_set_header Host $host;
+        expires 30d;
+        add_header Cache-Control "public";
+        access_log off;
+    }
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>内容后台 · Yu Chen Studio</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230071e3'/%3E%3Ctext x='32' y='45' font-family='sans-serif' font-size='36' font-weight='700' fill='%23fff' text-anchor='middle'%3EY%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body>
+
+<div class="bar">
+  <h1>内容后台</h1>
+  <span class="badge-mode" id="modeBadge">local</span>
+  <span class="sp"></span>
+  <button class="btn btn--ghost" id="btnExport">导出 JSON</button>
+  <button class="btn btn--ghost" id="btnImport">导入 JSON</button>
+  <button class="btn btn--ghost" id="btnReset">恢复默认</button>
+  <button class="btn btn--ghost" id="btnPreview">保存并预览</button>
+  <button class="btn" id="btnSave">保存</button>
+</div>
+
+<div class="wrap">
+  <aside class="side glass" id="side"></aside>
+  <main class="main glass" id="main"></main>
+</div>
+
+<input type="file" id="fileImport" accept="application/json" style="display:none">
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/content.default.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/admin.js"></script>
+<script>
+  document.getElementById('modeBadge').textContent = window.ContentAPI.mode + (window.ContentAPI.base ? ' · ' + window.ContentAPI.base : '');
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+target
+.git
+.gitignore
+*.log
+*.iml
+.idea
+.vscode
+src/main/resources/application-prod.yml

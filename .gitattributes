@@ -1,0 +1,19 @@
+# 统一换行符：仓库里一律 LF，避免 .sh 在 Windows 上被转成 CRLF 后到服务器跑不起来
+* text=auto eol=lf
+
+# 明确声明脚本
+*.sh  text eol=lf
+*.sql text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.conf text eol=lf
+
+# 二进制不参与换行转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.mp4 binary
+*.webm binary
+*.jar binary

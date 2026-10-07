@@ -1,0 +1,151 @@
+# =============================================================================
+#  生产编排：docker compose up -d --build
+#
+#  设计原则（对应"上传 GitHub 部署、内容不需要重新部署"）：
+#    · 仓库里只有代码。站点内容在 MySQL，素材在 upload-data 卷 —— 重新 docker
+#      compose up 不会清空它们，改内容也不需要重新构建镜像。
+#    · 首次启动才会播种默认管理员与默认内容；之后改 ADMIN_* 不再生效。
+#    · MySQL / Redis 不映射宿主端口，只对内网暴露，公网只能经 web(80) 进来。
+# =============================================================================
+# 固定项目名，好处有两个：
+#   1. 卷名恒为 portfolio_xxx，备份/恢复脚本不用猜目录名
+#   2. 换目录部署时不会凭空多出一套卷、丢掉旧数据
+name: portfolio
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: yc-mysql
+    restart: always
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --default-time-zone=+08:00
+      - --bind-address=0.0.0.0
+      - --innodb-flush-log-at-trx-commit=1
+      - --max-connections=200
+      - --local-infile=0
+      - --skip-name-resolve=OFF
+    expose:
+      - "3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB:-Cyan}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: Asia/Shanghai
+    volumes:
+      - mysql-data:/var/lib/mysql
+      # 首卷初始化时建表；之后由 JPA(ddl-auto=update) 负责演进，避免结构与实体漂移
+      - ./server/src/main/resources/db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    cap_drop: ["ALL"]
+    cap_add: ["CHOWN", "SETGID", "SETUID", "DAC_OVERRIDE"]
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 15
+      start_period: 60s
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: yc-redis
+    restart: always
+    # 不映射宿主端口，只在内部网络可达
+    expose:
+      - "6379"
+    environment:
+      # 必须给 healthcheck 用：它靠这个变量拼 -a 参数，
+      # 少了它 redis 永远 unhealthy，api 就永远起不来
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    # 密码用命令行参数注入，而不是写死在 redis.conf 里 —— 这样 .env 改了就生效
+    command:
+      - redis-server
+      - /usr/local/etc/redis/redis.conf
+      - --requirepass
+      - ${REDIS_PASSWORD}
+    volumes:
+      - redis-data:/data
+      - ./deploy/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    cap_drop: ["ALL"]
+    cap_add: ["SETUID", "SETGID", "DAC_OVERRIDE"]
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$$REDIS_PASSWORD\" ping | grep -q PONG"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: yc-api
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    expose:
+      - "8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DB: ${MYSQL_DB:-Cyan}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      # 默认 update：无论 schema.sql 有没有跑过，实体都能对上；稳定后可改 validate
+      JPA_DDL: ${JPA_DDL:-update}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ACCESS_TTL: ${JWT_ACCESS_TTL:-7200}
+      JWT_REMEMBER_TTL: ${JWT_REMEMBER_TTL:-1209600}
+      APP_UPLOAD_DIR: /var/lib/portfolio/upload
+      APP_CORS_ORIGINS: ${APP_CORS_ORIGINS:-http://localhost}
+      # Linux 下 Redis INFO 没有反斜杠路径，可以放心打开健康探针
+      MANAGEMENT_HEALTH_REDIS_ENABLED: "true"
+      # 仅首次启动播种管理员；播种完成后从 .env 里删掉这两行更安全
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-Cyan}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      TZ: Asia/Shanghai
+    volumes:
+      - upload-data:/var/lib/portfolio/upload
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: yc-web
+    restart: always
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      # 对外只暴露这一个端口；前面再挂 CDN / Caddy / Nginx 做 HTTPS 都可以
+      - "${HTTP_PORT:-80}:80"
+    volumes:
+      # 与 api 的上传目录是同一个卷，这里只读，用于直接 serve 图片/视频
+      - upload-data:/var/www/media:ro
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  mysql-data:      # 站点内容 / 账号 / 审计
+  redis-data:      # 缓存，丢了不影响数据
+  upload-data:     # 上传的图片与视频 —— 务必定期备份

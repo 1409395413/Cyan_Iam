@@ -1,0 +1,41 @@
+# ================= secrets =================
+.env
+.env.local
+*.env.local
+server/src/main/resources/application-prod.yml
+
+# ================= Java =================
+target/
+*.class
+*.jar
+!server/**/*.jar
+.mvn/
+mvnw
+mvnw.cmd
+
+# ================= Node =================
+node_modules/
+web/dist/
+web/.vite/
+*.local
+
+# ================= data =================
+# 站点内容与素材都在容器卷里，绝不进仓库（重新部署才不会覆盖线上数据）
+data/
+*.log
+/backup/
+/_smoke/
+/uploads/
+
+# ================= local toolchain / OS =================
+.toolchain/
+C:/Users/Administrator/.toolchain/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ================= IDE =================
+.idea/
+.vscode/*
+!.vscode/settings.json
+*.iml

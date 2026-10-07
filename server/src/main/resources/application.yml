@@ -1,0 +1,131 @@
+server:
+  port: 8080
+  forward-headers-strategy: native
+  compression:
+    enabled: true
+    mime-types: application/json,text/html,text/css,application/javascript
+    min-response-size: 1024
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-exception: false
+
+spring:
+  application:
+    name: portfolio-server
+  # ====================== MySQL 8 · 主存储 ======================
+  # 正文内容 / 管理员 / 素材元数据 / 审计日志 —— 强持久化，可备份可回滚
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3307}/${MYSQL_DB:Cyan}?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+    username: ${MYSQL_USER:yc_app}
+    password: ${MYSQL_PASSWORD:Cyan1120}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      pool-name: portfolio-pool
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 10000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      connection-test-query: SELECT 1
+  jpa:
+    open-in-view: false
+    hibernate:
+      # 开发用 update；生产必须改为 validate，配合 db/schema.sql 或 Flyway 迁移
+      ddl-auto: ${JPA_DDL:update}
+    properties:
+      hibernate.jdbc.batch_size: 20
+      hibernate.jdbc.time_zone: Asia/Shanghai
+
+  # ============================ Redis ============================
+  # 缓存 / 登录失败锁定 / 接口限流 / 会话黑名单 —— 缓存丢了不影响数据
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:Cyan1120}
+      database: ${REDIS_DB:0}
+      connect-timeout: 3s
+      timeout: 5s
+      lettuce:
+        pool:
+          enabled: true
+          max-active: 16
+          max-idle: 8
+          min-idle: 2
+          max-wait: 3s
+  # =======================  multipart / upload ===================
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 200MB
+      max-request-size: 220MB
+      file-size-threshold: 2MB
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      indent-output: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        # 只放 health；其余端点一律不暴露，nginx 层再封一道
+        include: health
+  endpoint:
+    health:
+      show-details: never
+  health:
+    redis:
+      # 默认关。原因：Windows 便携版 Redis 的 INFO 里带有 C:\... 这类反斜杠路径，
+      # Spring 用 java.util.Properties 解析时会抛 "Malformed \uxxxx encoding"，
+      # 于是 health 误报 DOWN（Redis 本身是好的）。Redis 只是缓存层，挂了会自动降级为
+      # 本地缓存，真实可用性看后台「运行状态」里的 redis 字段。
+      # Linux / Docker 下路径是正斜杠，可在环境变量里设 MANAGEMENT_HEALTH_REDIS_ENABLED=true。
+      enabled: ${MANAGEMENT_HEALTH_REDIS_ENABLED:false}
+
+logging:
+  level:
+    root: INFO
+    com.yuchen: DEBUG
+    org.springframework.data.redis: WARN
+
+# ====================== application config ======================
+app:
+  key-prefix: ${APP_KEY_PREFIX:yc:}
+  # true = 走 Redis 做内容缓存；false = 完全不用 Redis，只靠 MySQL
+  cache-enabled: ${APP_CACHE_ENABLED:true}
+  cache-ttl-seconds: ${APP_CACHE_TTL:300}
+  # 静态资源根目录（上传的图片/视频）
+  upload-dir: ${APP_UPLOAD_DIR:./data/upload}
+  # 允许上传的 MIME 白名单
+  upload-allow-mime:
+    - image/jpeg
+    - image/png
+    - image/webp
+    - image/gif
+    - video/mp4
+    - video/webm
+  # 单文件上限（字节），默认 200MB
+  upload-max-bytes: 209715200
+
+  cors:
+    # 开发环境允许 Vite 前端；生产改成正式域名，或由 Nginx 反向代理避免跨域
+    allowed-origins: ${APP_CORS_ORIGINS:http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173}
+
+  security:
+    # JWT 密钥：生产务必用 openssl rand -base64 64 生成并通过环境变量注入
+    jwt-secret: ${JWT_SECRET:please-change-me-please-change-me-please-change-me-32byte-minimum}
+    access-token-ttl: ${JWT_ACCESS_TTL:7200}      # 秒，默认 2 小时
+    remember-ttl: ${JWT_REMEMBER_TTL:1209600}     # 秒，默认 14 天
+    # 登录失败防护：同一账号+IP 连续失败 N 次锁定 M 秒
+    max-failed-attempts: ${LOGIN_MAX_FAILED:5}
+    lock-seconds: ${LOGIN_LOCK_SECONDS:900}
+    # 接口限流（令牌桶，单位：次/分钟）
+    rate-limit-login: ${RATE_LIMIT_LOGIN:10}
+    rate-limit-api: ${RATE_LIMIT_API:120}
+
+  admin:
+    # 首次启动用于播种初始管理员账号，播种后请删除环境变量或留空
+    bootstrap-username: ${ADMIN_USERNAME:}
+    bootstrap-password: ${ADMIN_PASSWORD:}
