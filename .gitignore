@@ -27,6 +27,9 @@ data/
 /_smoke/
 /uploads/
 
+# 本机会话/记忆数据，与项目无关，绝不进仓库
+.workbuddy/
+
 # ================= local toolchain / OS =================
 .toolchain/
 C:/Users/Administrator/.toolchain/
