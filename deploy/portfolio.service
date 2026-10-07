@@ -1,0 +1,50 @@
+# =============================================================================
+#  Cyan · Studio 后端 systemd 单元
+#
+#  放置位置：/etc/systemd/system/portfolio.service
+#  生效命令：systemctl daemon-reload && systemctl enable --now portfolio
+#
+#  运行身份：portfolio（由 deploy/setup-centos.sh 创建，无登录 shell）
+#  环境变量：/opt/portfolio/deploy/portfolio.env（含数据库密码与 JWT 密钥，权限 600）
+#            systemd 的 EnvironmentFile 不支持 export 前缀，值里也不要带引号。
+# =============================================================================
+
+[Unit]
+Description=Cyan Studio Portfolio Backend (Spring Boot)
+Documentation=https://github.com/1409395413/Cyan_Iam
+After=network-online.target mysqld.service redis.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=portfolio
+Group=portfolio
+WorkingDirectory=/opt/portfolio
+
+# 生产环境变量（数据库 / Redis / JWT / 上传目录）
+EnvironmentFile=/opt/portfolio/deploy/portfolio.env
+# JVM 参数：轻量服务器内存小，这里按 1~2G 机型给的默认堆，按需调整 -Xmx
+Environment=JAVA_OPTS=-Xms256m -Xmx512m -XX:+UseG1GC -Dfile.encoding=UTF-8 -Duser.timezone=Asia/Shanghai
+
+ExecStart=/usr/bin/java $JAVA_OPTS -jar /opt/portfolio/app.jar
+
+# 崩溃自动拉起
+Restart=always
+RestartSec=10
+# 优雅停机等待（Spring Boot 默认 shutdown 超时 30s）
+TimeoutStopSec=40
+KillSignal=SIGTERM
+
+StandardOutput=append:/var/log/portfolio/app.log
+StandardError=append:/var/log/portfolio/app.log
+
+# ---------------------------- 安全加固 ----------------------------
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+# 需要写 /var/lib/portfolio/upload 与 /var/log/portfolio，
+# 若上面开了 ProtectSystem=strict 就必须额外 ReadWritePaths，这里用 full 简化。
+ReadWritePaths=/var/lib/portfolio /var/log/portfolio
+
+[Install]
+WantedBy=multi-user.target
