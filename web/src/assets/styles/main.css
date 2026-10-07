@@ -518,9 +518,9 @@ ul{margin:0;padding:0;list-style:none}
   .hero{padding-top:calc(var(--nav-h) + 64px)}
   .hero__stats{grid-template-columns:repeat(2,1fr);gap:20px}
   .nav{padding:0 12px}
-  .nav__pill{max-width:calc(100vw - 24px)}
+  .nav__pill{max-width:calc(100vw - 24px);padding-right:52px}
   .nav__link{display:none}
-  .nav__pill.is-open{align-items:flex-start;flex-direction:column;height:auto;padding:14px;border-radius:var(--r-l);gap:4px;overflow:visible}
+  .nav__pill.is-open{align-items:flex-start;flex-direction:column;height:auto;padding:14px 52px 14px 14px;border-radius:var(--r-l);gap:4px;overflow:visible}
   .nav__pill.is-open .nav__link{display:block;width:100%;padding:11px 14px;border-radius:var(--r-s)}
   .nav__burger{display:grid;position:absolute;right:22px;top:0;height:var(--nav-h);width:36px;place-items:center;border:0;background:none;cursor:pointer;color:var(--ink)}
   .nav__burger svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.8;fill:none}
