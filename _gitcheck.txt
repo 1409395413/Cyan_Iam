@@ -1,4 +1,0 @@
-﻿added=True
-version=git version 2.55.0.windows.3
-nowPath=
-C:\Users\Administrator\.toolchain\redis;C:\Users\Administrator\.toolchain\maven\bin;C:\Users\Administrator\.toolchain\jdk-17\bin;E:\Python313\Scripts\;E:\Python313\;C:\Users\Administrator\AppData\Local\Programs\Python\Launcher\;C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps;C:\Users\Administrator\.workbuddy\binaries\PortableGit\versions\1.2.0\cmd
