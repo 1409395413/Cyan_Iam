@@ -297,7 +297,7 @@ onMounted(() => { loadMedia() })
     <!-- 顶栏 -->
     <header class="admin-bar glass">
       <RouterLink to="/" class="admin-brand">
-        <span class="nav__mark">{{ content?.site.brandMark || 'Y' }}</span>
+        <span class="nav__mark">{{ content?.site.brandMark || 'C' }}</span>
         内容后台
       </RouterLink>
 

@@ -20,10 +20,10 @@
 window.DEFAULT_CONTENT = {
   version: 1,
   site: {
-    brandName: 'Yu Chen · Studio',
+    brandName: 'Cyan · Studio',
     brandMark: 'Y',
     footerNote: '摄影 · 剪辑 · 直播搭建 · AI 影像<br>让画面为目标服务。',
-    copyright: '© 2026 Yu Chen Studio. 保留所有权利。',
+    copyright: '© 2026 Cyan · Studio. 保留所有权利。',
     footerCols: [
       { title: '作品', links: [
         { label: '摄影作品集', href: '#photo' },
@@ -85,7 +85,7 @@ window.DEFAULT_CONTENT = {
         '我是陈屿，一名跨领域的影像创作者。从商业人像与风光的静态摄影起步，逐步扩展到品牌短片剪辑、大型活动的多机位直播导播，以及近两年的 AI 生成影像实践。',
         '我的工作方式偏向"全流程参与"：理解目标 → 设计分镜 → 现场执行 → 后期打磨。这让影像不只是好看的画面，而是能解决问题的表达。'
       ],
-      media: { kind: 'image', src: '', title: '个人形象照', hint: '竖版 3:4 · 建议 1200×1600', cap: 'Yu Chen', cap2: '上海 / 全国出差' },
+      media: { kind: 'image', src: '', title: '个人形象照', hint: '竖版 3:4 · 建议 1200×1600', cap: 'Cyan', cap2: '上海 / 全国出差' },
       facts: [
         { k: '主攻', v: '商业摄影 / 品牌短片' },
         { k: '器材', v: 'Sony FX3 · A7R V · 电影镜头组' },
@@ -208,8 +208,8 @@ window.DEFAULT_CONTENT = {
       title: '说说你的项目',
       lead: '无论是商业拍摄、品牌短片、直播执行还是 AI 影像实验，欢迎邮件或直接加微信，24 小时内回复。',
       rows: [
-        { k: '邮箱',   v: 'hello@yuchen.studio' },
-        { k: '微信',   v: 'yuchen_film' },
+        { k: '邮箱',   v: 'hello@cyan.studio' },
+        { k: '微信',   v: 'cyan_film' },
         { k: '电话',   v: '+86 138 0000 0000' },
         { k: '所在地', v: '上海（可全国 / 远程协作）' },
         { k: '档期',   v: '2026 Q4 起接受预约' }
